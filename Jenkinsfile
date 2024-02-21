@@ -1,7 +1,7 @@
 pipeline {
        agent {
         node {
-            label 'jenkins-slave-node'
+            label 'jenkins-slave-node' 
         }
     }
    
@@ -19,7 +19,7 @@ pipeline {
       
         stage("test stage"){
             steps{
-                echo "----------- unit test started -----------"
+                echo "----------- unit test started ------------"
                 sh 'mvn surefire-report:report'
                 echo "----------- unit test Completed -----------"
             }
