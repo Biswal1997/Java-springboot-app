@@ -24,6 +24,30 @@ pipeline {
                 echo "----------- unit test Completed ----------"
             }
         }
+
+         stage('SonarQube Analysis') {
+            environment {
+                scannerHome = tool 'sonar-scanner-cofigure'
+            }
+            steps{
+                withSonarQubeEnv('sonar-server-configure') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
+
+        stage("Quality Gate"){
+            steps {
+                script {
+                    timeout(time: 1, unit: 'HOURS') { 
+                        def qg = waitForQualityGate() 
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
